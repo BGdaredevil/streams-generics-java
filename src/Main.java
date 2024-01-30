@@ -1,7 +1,9 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -9,18 +11,46 @@ import java.util.regex.Pattern;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     private static final String PATH = "./input.txt";
+    private static final String DIR_PATH = "../test-fs/";
 
     public static void main(String[] args) {
 
 //        readFile(PATH);
 //        writeToFile(PATH);
 //        coppyToFile(PATH, "./input-copy.txt");
-        extractInts(PATH, "./extracted-digits.txt");
+//        extractInts(PATH, "./extracted-digits.txt");
+//        C:\Users\dimitar.dimitrov\Desktop\WorkRepos\java-stuff\test-fs
+//        C:\Users\dimitar.dimitrov\Desktop\WorkRepos\java-stuff\streams-generics
+//        listFiles("C:\\Users\\dimitar.dimitrov\\Desktop\\WorkRepos\\java-stuff\\test-fs");
+        listFiles(DIR_PATH);
+    }
 
+    private static void listFiles(String dirPath) {
+        try {
+            String absPath = parseRelativePath(dirPath);
+            File[] fileList = Objects.requireNonNull(new File(absPath).listFiles());
+            File[] sortedFiles = Arrays.stream(fileList)
+                                    .filter(e -> !e.isDirectory())
+                                    .sorted(Comparator.comparing(File::getName, String::compareTo))
+                                    .toArray(File[]::new);
+
+            for (File file : sortedFiles) {
+                System.out.printf("%s - %s b\n", file.getName(), Files.size(Paths.get(file.getAbsolutePath())));
+            }
+
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private static String parseRelativePath (String path) throws IOException {
+        File helper = new File(path);
+        return helper.getCanonicalPath();
     }
 
     private static void extractInts(String inputPath, String outputPath) {
-        Pattern digitSelector = Pattern.compile("(?<!\\w)\\d+(?![\\w]+)");
+        Pattern digitSelector = Pattern.compile("(?<!\\w)\\d+(?!\\w+)");
 
         try (BufferedReader in = new BufferedReader(new FileReader(inputPath)); PrintWriter out = new PrintWriter(new FileWriter(outputPath))) {
             String line = in.readLine();
