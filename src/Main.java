@@ -12,7 +12,27 @@ public class Main {
     public static void main(String[] args) {
 
 //        readFile("./input.txt");
-        writeToFile("./input.txt");
+//        writeToFile("./input.txt");
+        coppyToFile("./input.txt", "./input-copy.txt");
+
+    }
+
+    private static void coppyToFile(String inputPath, String outputPath) {
+        List<Character> chars = new ArrayList<>(Arrays.asList(' ', '\n'));
+        try (FileInputStream in = new FileInputStream(inputPath); FileOutputStream out = new FileOutputStream(outputPath)) {
+            int character = in.read();
+            while (character != -1) {
+                if (chars.contains((char) character)) {
+                    out.write((char) character);
+                } else {
+                    out.write(String.valueOf(character).getBytes());
+                }
+                character = in.read();
+            }
+        } catch (IOException err) {
+            System.out.println(err.getMessage());
+            err.printStackTrace();
+        }
 
     }
 
