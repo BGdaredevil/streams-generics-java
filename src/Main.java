@@ -1,19 +1,43 @@
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.Buffer;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
+    private static final String PATH = "./input.txt";
+
     public static void main(String[] args) {
 
-//        readFile("./input.txt");
-//        writeToFile("./input.txt");
-        coppyToFile("./input.txt", "./input-copy.txt");
+//        readFile(PATH);
+//        writeToFile(PATH);
+//        coppyToFile(PATH, "./input-copy.txt");
+        extractInts(PATH, "./extracted-digits.txt");
+
+    }
+
+    private static void extractInts(String inputPath, String outputPath) {
+        Pattern digitSelector = Pattern.compile("(?<!\\w)\\d+(?![\\w]+)");
+
+        try (BufferedReader in = new BufferedReader(new FileReader(inputPath)); PrintWriter out = new PrintWriter(new FileWriter(outputPath))) {
+            String line = in.readLine();
+
+            while (line != null) {
+                Matcher matcher = digitSelector.matcher(line);
+                while (matcher.find()) {
+                    out.println(matcher.group());
+                }
+
+                line = in.readLine();
+            }
+
+        } catch (IOException err) {
+            System.out.println(err.getMessage());
+            err.printStackTrace();
+        }
 
     }
 
