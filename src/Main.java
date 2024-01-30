@@ -19,10 +19,48 @@ public class Main {
 //        writeToFile(PATH);
 //        coppyToFile(PATH, "./input-copy.txt");
 //        extractInts(PATH, "./extracted-digits.txt");
-//        C:\Users\dimitar.dimitrov\Desktop\WorkRepos\java-stuff\test-fs
-//        C:\Users\dimitar.dimitrov\Desktop\WorkRepos\java-stuff\streams-generics
-//        listFiles("C:\\Users\\dimitar.dimitrov\\Desktop\\WorkRepos\\java-stuff\\test-fs");
-        listFiles(DIR_PATH);
+//        listFiles(DIR_PATH);
+        listNestedFolders(DIR_PATH);
+
+    }
+
+    private static void listNestedFolders(String dirPath) {
+        Map<String, File> dirsToTraverse = new LinkedHashMap<>();
+
+        try {
+            String absPath = parseRelativePath(dirPath);
+            File rootItem = new File(absPath);
+
+            File[] dirs = rootItem.listFiles(File::isDirectory);
+
+            while (dirs.length > 0) {
+                Map<String, File> tempMap = new LinkedHashMap<>();
+
+                Arrays.stream(dirs).forEach(dir -> {
+                    if (!dirsToTraverse.containsKey(dir.getAbsolutePath()) && dir.isDirectory()) {
+                        dirsToTraverse.put(dir.getAbsolutePath(), dir);
+                        File[] subDirs = dir.listFiles(File::isDirectory);
+                        Arrays.stream(subDirs).forEach(subDir -> {
+                            if (!tempMap.containsKey(subDir.getAbsolutePath())) {
+                                tempMap.put(subDir.getAbsolutePath(), subDir);
+                            }
+                        });
+                    }
+                });
+
+                dirs = tempMap.values().toArray(File[]::new);
+            }
+
+            dirsToTraverse.forEach((path, dir) -> {
+                System.out.printf(".%s -> %s\n", path.replace(absPath, "").replace(dir.getName(), ""), dir.getName());
+            });
+
+            System.out.println(dirsToTraverse.size());
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     private static void listFiles(String dirPath) {
@@ -30,9 +68,9 @@ public class Main {
             String absPath = parseRelativePath(dirPath);
             File[] fileList = Objects.requireNonNull(new File(absPath).listFiles());
             File[] sortedFiles = Arrays.stream(fileList)
-                                    .filter(e -> !e.isDirectory())
-                                    .sorted(Comparator.comparing(File::getName, String::compareTo))
-                                    .toArray(File[]::new);
+                    .filter(e -> !e.isDirectory())
+                    .sorted(Comparator.comparing(File::getName, String::compareTo))
+                    .toArray(File[]::new);
 
             for (File file : sortedFiles) {
                 System.out.printf("%s - %s b\n", file.getName(), Files.size(Paths.get(file.getAbsolutePath())));
@@ -44,7 +82,7 @@ public class Main {
         }
     }
 
-    private static String parseRelativePath (String path) throws IOException {
+    private static String parseRelativePath(String path) throws IOException {
         File helper = new File(path);
         return helper.getCanonicalPath();
     }
