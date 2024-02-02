@@ -24,8 +24,35 @@ public class Main {
 //        System.out.println(recursivelyListNestedFolders(DIR_PATH));
 //        System.out.println(recordedCount);
 //        serializeDeserializeObject();
-        testJarClass();
+//        testJarClass();
+    testArrayCreator();
 
+
+    }
+
+    private static void testArrayCreator() {
+        String[] vars = ArrayCreator.create(3, "vars");
+        System.out.println(Arrays.toString(vars));
+
+        Integer[] ints = ArrayCreator.create(3, 5);
+//        int[] ints2 = ArrayCreator.create(3, 7); // java cannot create primitive generic arrays
+        System.out.println(Arrays.toString(ints));
+
+        Map<String, Integer>  map = new TreeMap<>(Map.of("Key", 1, "Key2", 2));
+        Map<String, Integer>[] maps = ArrayCreator.create(3, map);
+        System.out.println(Arrays.toString(maps));
+
+        String[] vars2 = ArrayCreator.create(String.class, 4, "over");
+        System.out.println(Arrays.toString(vars2));
+
+        Integer[] ints2 = ArrayCreator.create(Integer.class, 4, 99);
+        System.out.println(Arrays.toString(ints2));
+
+        Map<String, Integer>  map2 = new LinkedHashMap<>(Map.of("Key", 1, "Key2", 2));
+        Map<String, Integer>[] maps2 = ArrayCreator.create(Map.class, 3, map2);
+        System.out.println(Arrays.toString(maps2));
+        System.out.println(maps[0].getClass());
+        System.out.println(maps2[0].getClass());
     }
 
     private static void testJarClass() {
