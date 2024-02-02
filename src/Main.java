@@ -20,8 +20,36 @@ public class Main {
 //        coppyToFile(PATH, "./input-copy.txt");
 //        extractInts(PATH, "./extracted-digits.txt");
 //        listFiles(DIR_PATH);
-        listNestedFolders(DIR_PATH);
+//        listNestedFolders(DIR_PATH);
+        System.out.println(recursivelyListNestedFolders(DIR_PATH));
+        System.out.println(recordedCount);
+    }
 
+    static int recordedCount = 0;
+
+    private static String recursivelyListNestedFolders(String dirPath) {
+        ArrayDeque<String> result = new ArrayDeque<>();
+
+        try {
+            String absPath = parseRelativePath(dirPath);
+            File root = new File(absPath);
+
+            if (root.isDirectory()) {
+                result.add(String.format("%s -> %s", root.getPath(), root.getName()));
+                recordedCount++;
+            }
+
+            File[] nested = root.listFiles(File::isDirectory);
+
+            if (nested != null) {
+                Arrays.stream(nested).map(e -> recursivelyListNestedFolders(e.getPath())).forEach(result::add);
+            }
+
+            return String.join("\n", result.stream().map(e -> e.replace(root.getParent(), ".")).toArray(String[]::new));
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private static void listNestedFolders(String dirPath) {
@@ -50,12 +78,13 @@ public class Main {
 
                 dirs = tempMap.values().toArray(File[]::new);
             }
+            System.out.printf(".%s -> %s\n", rootItem.getPath().replace(absPath, "").replace(rootItem.getName(), ""), rootItem.getName());
 
             dirsToTraverse.forEach((path, dir) -> {
                 System.out.printf(".%s -> %s\n", path.replace(absPath, "").replace(dir.getName(), ""), dir.getName());
             });
 
-            System.out.println(dirsToTraverse.size());
+            System.out.println(dirsToTraverse.size() +1);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
