@@ -21,8 +21,62 @@ public class Main {
 //        extractInts(PATH, "./extracted-digits.txt");
 //        listFiles(DIR_PATH);
 //        listNestedFolders(DIR_PATH);
-        System.out.println(recursivelyListNestedFolders(DIR_PATH));
-        System.out.println(recordedCount);
+//        System.out.println(recursivelyListNestedFolders(DIR_PATH));
+//        System.out.println(recordedCount);
+        serializeDeserializeObject();
+
+    }
+
+    private static void serializeDeserializeObject() {
+        Set<SerializableObject> playground = new HashSet<>();
+        SerializableObject pesho = new SerializableObject("Pesho", 22, new HashSet<>(Set.of("mocho", "sharo", "the rest")), true, 'y');
+        SerializableObject gosho = new SerializableObject("gosho", 32, new HashSet<>(Set.of("car", "bike")), true, 'y');
+        SerializableObject misho = new SerializableObject("misho", 26, new HashSet<>(), true, 'y');
+        SerializableObject simo = new SerializableObject("simo", 30, new HashSet<>(Set.of("mavro")), true, 'y');
+
+        System.out.printf("one  %d, %s\n", pesho.getID(), pesho.getName());
+
+        playground.add(pesho);
+        playground.add(gosho);
+        playground.add(misho);
+        playground.add(simo);
+
+        try (FileOutputStream out = new FileOutputStream("./serialized-single-item");
+             ObjectOutputStream objStream = new ObjectOutputStream(out)
+        ) {
+            objStream.writeObject(pesho);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        try (FileOutputStream out = new FileOutputStream("./serialized-many-items");
+             ObjectOutputStream objStream = new ObjectOutputStream(out)
+        ) {
+            objStream.writeObject(playground);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        try (FileInputStream in = new FileInputStream("./serialized-single-item");
+             ObjectInputStream objStream = new ObjectInputStream(in)
+        ) {
+            SerializableObject asan = (SerializableObject) objStream.readObject();
+           System.out.printf("two  %d, %s\n", asan.getID(), asan.getName());
+
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        try (FileInputStream in = new FileInputStream("./serialized-many-items");
+             ObjectInputStream objStream = new ObjectInputStream(in)
+        ) {
+            Set<SerializableObject> asan = (HashSet<SerializableObject>) objStream.readObject();
+
+            asan.forEach(el -> System.out.printf("three %d, %s\n", el.getID(), el.getName()));
+
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     static int recordedCount = 0;
@@ -84,7 +138,7 @@ public class Main {
                 System.out.printf(".%s -> %s\n", path.replace(absPath, "").replace(dir.getName(), ""), dir.getName());
             });
 
-            System.out.println(dirsToTraverse.size() +1);
+            System.out.println(dirsToTraverse.size() + 1);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
