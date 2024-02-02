@@ -26,7 +26,21 @@ public class Main {
 //        serializeDeserializeObject();
 //        testJarClass();
 //        testArrayCreator();
-        testScales();
+//        testScales();
+        testBox();
+
+    }
+
+    private static void testBox() {
+        Scanner sc = new Scanner(System.in);
+        int rounds = Integer.parseInt(sc.nextLine());
+
+        while (rounds > 0) {
+            rounds--;
+
+            Box<String> test = new Box<>(sc.nextLine());
+            System.out.println(test);
+        }
 
     }
 
