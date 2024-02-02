@@ -23,7 +23,31 @@ public class Main {
 //        listNestedFolders(DIR_PATH);
 //        System.out.println(recursivelyListNestedFolders(DIR_PATH));
 //        System.out.println(recordedCount);
-        serializeDeserializeObject();
+//        serializeDeserializeObject();
+        testJarClass();
+
+    }
+
+    private static void testJarClass() {
+        Jar<String> store = new Jar<>();
+        Scanner sc = new Scanner(System.in);
+        String command = sc.nextLine();
+
+        while (!command.equals("end")) {
+            if (command.equals("get")) {
+                Optional<String> thing = store.remove();
+                thing.ifPresentOrElse(
+                        s -> System.out.printf("Retrieved -> %s\n", s),
+                        () -> System.out.println("Retrieved -> tis empty")
+                );
+                command = sc.nextLine();
+                continue;
+            }
+
+            store.add(command);
+            System.out.printf("added -> %s\n", command);
+            command = sc.nextLine();
+        }
 
     }
 
@@ -61,7 +85,7 @@ public class Main {
              ObjectInputStream objStream = new ObjectInputStream(in)
         ) {
             SerializableObject asan = (SerializableObject) objStream.readObject();
-           System.out.printf("two  %d, %s\n", asan.getID(), asan.getName());
+            System.out.printf("two  %d, %s\n", asan.getID(), asan.getName());
 
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
