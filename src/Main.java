@@ -25,9 +25,27 @@ public class Main {
 //        System.out.println(recordedCount);
 //        serializeDeserializeObject();
 //        testJarClass();
-    testArrayCreator();
+//        testArrayCreator();
+        testScales();
 
+    }
 
+    private static void testScales() {
+        Scales<String> first1 = new Scales<>("123r", "123");
+        Scales<String> first2 = new Scales<>("123", "123l");
+        Scales<String> first3 = new Scales<>("123", "123");
+        Scales<Integer> second = new Scales<>(3, 4);
+        Scales<Boolean> third = new Scales<>(true, false);
+        Scales<Float> fourth = new Scales<>((float) 2.3, (float) 3.2);
+        Scales<Double> five = new Scales<>(2.3, 3.2);
+
+        System.out.println(first1.getHeavier());
+        System.out.println(first2.getHeavier());
+        System.out.println(first3.getHeavier());
+        System.out.println(second.getHeavier());
+        System.out.println(third.getHeavier());
+        System.out.println(fourth.getHeavier());
+        System.out.println(five.getHeavier());
     }
 
     private static void testArrayCreator() {
@@ -38,7 +56,7 @@ public class Main {
 //        int[] ints2 = ArrayCreator.create(3, 7); // java cannot create primitive generic arrays
         System.out.println(Arrays.toString(ints));
 
-        Map<String, Integer>  map = new TreeMap<>(Map.of("Key", 1, "Key2", 2));
+        Map<String, Integer> map = new TreeMap<>(Map.of("Key", 1, "Key2", 2));
         Map<String, Integer>[] maps = ArrayCreator.create(3, map);
         System.out.println(Arrays.toString(maps));
 
@@ -48,7 +66,7 @@ public class Main {
         Integer[] ints2 = ArrayCreator.create(Integer.class, 4, 99);
         System.out.println(Arrays.toString(ints2));
 
-        Map<String, Integer>  map2 = new LinkedHashMap<>(Map.of("Key", 1, "Key2", 2));
+        Map<String, Integer> map2 = new LinkedHashMap<>(Map.of("Key", 1, "Key2", 2));
         Map<String, Integer>[] maps2 = ArrayCreator.create(Map.class, 3, map2);
         System.out.println(Arrays.toString(maps2));
         System.out.println(maps[0].getClass());
