@@ -31,7 +31,33 @@ public class Main {
 //        testBoxIntegers();
 //        testSwapperIntegers();
 //        testGenericCounter();
-        testGenericCounterDoubles();
+//        testGenericCounterDoubles();
+        testCustomList();
+
+    }
+
+    private static void testCustomList() {
+        Scanner sc = new Scanner(System.in);
+        ComparatorList<String> list = new ComparatorList<>();
+        String comand = sc.nextLine();
+
+        while (!comand.equals("end")) {
+            String[] commandParams = comand.split(" ");
+
+            switch (commandParams[0]) {
+                case "Add" -> list.add(commandParams[1]);
+                case "Remove" -> list.remove(Integer.parseInt(commandParams[1]));
+                case "Contains" -> System.out.println(list.contains(commandParams[1]));
+                case "Swap" -> list.swap(Integer.parseInt(commandParams[1]), Integer.parseInt(commandParams[2]));
+                case "Max" -> System.out.println(list.getMax());
+                case "Min" -> System.out.println(list.getMin());
+                case "Greater" -> System.out.println(list.countGreaterThan(commandParams[1]));
+                case "Print" -> System.out.println(list.print());
+            }
+
+            comand = sc.nextLine();
+        }
+
     }
 
     private static void testGenericCounterDoubles() {
