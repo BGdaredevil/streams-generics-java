@@ -29,8 +29,37 @@ public class Main {
 //        testScales();
 //        testBox();
 //        testBoxIntegers();
-        testSwapperIntegers();
+//        testSwapperIntegers();
+//        testGenericCounter();
+        testGenericCounterDoubles();
+    }
 
+    private static void testGenericCounterDoubles() {
+        Scanner sc = new Scanner(System.in);
+        int rounds = Integer.parseInt(sc.nextLine());
+        ArrayList<Double> items = new ArrayList<>(rounds);
+
+        while (rounds > 0) {
+            rounds--;
+            items.add(Double.parseDouble(sc.nextLine()));
+        }
+
+        ComparatorBox<Double> counterHelper = new ComparatorBox<>(items);
+        System.out.println(counterHelper.compareValues(Double.parseDouble(sc.nextLine())));
+    }
+
+    private static void testGenericCounter() {
+        Scanner sc = new Scanner(System.in);
+        int rounds = Integer.parseInt(sc.nextLine());
+        ArrayList<String> items = new ArrayList<>(rounds);
+
+        while (rounds > 0) {
+            rounds--;
+            items.add(sc.nextLine());
+        }
+
+        ComparatorBox<String> counterHelper = new ComparatorBox<>(items);
+        System.out.println(counterHelper.compareValues(sc.nextLine()));
     }
 
     private static void testSwapperIntegers() {
@@ -38,7 +67,7 @@ public class Main {
         int rounds = Integer.parseInt(sc.nextLine());
         Swapper<Integer> swapper = new Swapper<>(rounds);
 
-        while (rounds>0){
+        while (rounds > 0) {
             rounds--;
             swapper.addItem(Integer.parseInt(sc.nextLine()));
         }
@@ -50,13 +79,12 @@ public class Main {
         System.out.println(swapper.printState());
     }
 
-
     private static void testSwapper() {
         Scanner sc = new Scanner(System.in);
         int rounds = Integer.parseInt(sc.nextLine());
         Swapper<String> swapper = new Swapper<>(rounds);
 
-        while (rounds>0){
+        while (rounds > 0) {
             rounds--;
             swapper.addItem(sc.nextLine());
         }
