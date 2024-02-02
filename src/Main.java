@@ -27,7 +27,57 @@ public class Main {
 //        testJarClass();
 //        testArrayCreator();
 //        testScales();
-        testBox();
+//        testBox();
+//        testBoxIntegers();
+        testSwapperIntegers();
+
+    }
+
+    private static void testSwapperIntegers() {
+        Scanner sc = new Scanner(System.in);
+        int rounds = Integer.parseInt(sc.nextLine());
+        Swapper<Integer> swapper = new Swapper<>(rounds);
+
+        while (rounds>0){
+            rounds--;
+            swapper.addItem(Integer.parseInt(sc.nextLine()));
+        }
+
+        int[] swapIndexes = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+
+        swapper.swap(swapIndexes[0], swapIndexes[1]);
+
+        System.out.println(swapper.printState());
+    }
+
+
+    private static void testSwapper() {
+        Scanner sc = new Scanner(System.in);
+        int rounds = Integer.parseInt(sc.nextLine());
+        Swapper<String> swapper = new Swapper<>(rounds);
+
+        while (rounds>0){
+            rounds--;
+            swapper.addItem(sc.nextLine());
+        }
+
+        int[] swapIndexes = Arrays.stream(sc.nextLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+
+        swapper.swap(swapIndexes[0], swapIndexes[1]);
+
+        System.out.println(swapper.printState());
+    }
+
+    private static void testBoxIntegers() {
+        Scanner sc = new Scanner(System.in);
+        int rounds = Integer.parseInt(sc.nextLine());
+
+        while (rounds > 0) {
+            rounds--;
+
+            Box<Integer> test = new Box<>(Integer.parseInt(sc.nextLine()));
+            System.out.println(test);
+        }
 
     }
 
